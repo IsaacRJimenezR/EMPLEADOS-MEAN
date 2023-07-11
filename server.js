@@ -3,8 +3,9 @@ const mongoose = require ('mongoose')
 const cors = require ('cors')
 const bodyParser = require ('body-parser')
 const path = require('path')
-const { error } = require('console')
+// const { error } = require('console')
 
+mongoose.set('strictQuery', false);
 //CONEXION A LA DB
 mongoose
 // .connect('mongodb://127.0.0.1:27017/empleadosds02sv22') //puerto de mongo al instalarlo de manera local
@@ -18,36 +19,36 @@ mongoose
 
     //CONFIGURACCION DEL SERVIDOR WEB
     const empleadoRuta = require ('./Routes/empleado.route');
-    const { create } = require('domain')
+    // const { create } = require('domain')
     const app = express();
 
-    app.use(bodyParser.json());
+    app.use(bodyParser.json())
     app.use(
         bodyParser.urlencoded({
             extended: false,
         })
     )
 
-    app.use(cors());
-    app.use(express.static(path.join(__dirname,'dist/empleados-mean')));
-    app.use('/',express.static(path.join(__dirname,'dist/empleados-mean')));
-    app.use('/api',empleadoRuta);
+    app.use(cors())
+    app.use(express.static(path.join(__dirname,'dist/empleados-mean')))
+    app.use('/',express.static(path.join(__dirname,'dist/empleados-mean')))
+    app.use('/api',empleadoRuta)
 
     //HABILITAR EL PUERTO
-    const port = process.env.PORT || 4000;
+    const port = process.env.PORT || 4000
     const server = app.listen(port, () =>{
-        console.log('CONECTADO AL PUERTO '+port);
+        console.log('CONECTADO AL PUERTO '+port)
     });
 
 
     //MANEJADO DE ERROR 404
     app.use((req,res,next) => {
-        next(createError(404));
+        next(createError(404))
     });
 
     //MANEJADOR DE  ERRORES GENERALES
     app.use(function(err,req,res,next){
         console.log(err.message);
-        if(!err.statusCode) err.statusCode = 500;
-        res.status(err.statusCode).send(err.message);
+        if(!err.statusCode) err.statusCode = 500
+        res.status(err.statusCode).send(err.message)
     })
